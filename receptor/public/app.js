@@ -5,45 +5,18 @@
 const API_BASE = ''; // mismo origen (receptor)
 
 async function cargarDocumentos() {
-  const contenedor = document.getElementById('lista-documentos');
   const mensaje = document.getElementById('mensaje-lista');
   try {
     const res = await fetch(`${API_BASE}/api/documentos`);
     if (!res.ok) throw new Error('Error al cargar la lista');
     const datos = await res.json();
-    mensaje.remove();
-    if (datos.length === 0) {
-      contenedor.innerHTML = '<p class="mensaje">No hay documentos recibidos.</p>';
-      return;
-    }
-    contenedor.innerHTML = datos
-      .map(
-        (d) => `
-        <div class="item-documento" data-id="${d.id}">
-          <div>
-            <span class="nombre">${escapeHtml(d.nombreOriginal)}</span>
-            <div class="fecha">${formatearFecha(d.fechaRecepcion)}</div>
-          </div>
-          <div class="acciones">
-            <button type="button" class="btn btn-secundario" data-action="ver" data-id="${d.id}">Ver</button>
-            <button type="button" class="btn" data-action="descargar" data-id="${d.id}">Descargar</button>
-          </div>
-        </div>
-      `
-      )
-      .join('');
-    contenedor.querySelectorAll('[data-action]').forEach((btn) => {
-      btn.addEventListener('click', (e) => {
-        const id = e.currentTarget.dataset.id;
-        const action = e.currentTarget.dataset.action;
-        if (action === 'ver') abrirDesencriptado(id, false);
-        else if (action === 'descargar') abrirDesencriptado(id, true);
-      });
-    });
+    mensaje?.remove();
+    renderizarDocumentos(datos);
   } catch (err) {
     mensaje.textContent = 'Error al cargar los documentos. ' + err.message;
   }
 }
+
 
 function escapeHtml(text) {
   const div = document.createElement('div');
@@ -68,5 +41,73 @@ function abrirDesencriptado(id, descargar) {
     window.open(url, '_blank', 'noopener');
   }
 }
+
+function renderizarDocumentos(datos) {
+  const contenedor = document.getElementById('lista-documentos');
+
+  if (datos.length === 0) {
+    contenedor.innerHTML = '<p class="mensaje">No hay documentos.</p>';
+    return;
+  }
+
+  contenedor.innerHTML = datos
+    .map(
+      (d) => `
+      <div class="item-documento" data-id="${d.id}">
+        <div>
+          <span class="nombre">${escapeHtml(d.nombreOriginal || 'Documento sin nombre')}</span>
+          <div class="fecha">${formatearFecha(d.fechaRecepcion)}</div>
+        </div>
+        <div class="acciones">
+          <button type="button" class="btn btn-secundario" data-action="ver" data-id="${d.id}">Ver</button>
+          <button type="button" class="btn" data-action="descargar" data-id="${d.id}">Descargar</button>
+        </div>
+      </div>
+    `
+    )
+    .join('');
+
+  contenedor.querySelectorAll('[data-action]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      const id = e.currentTarget.dataset.id;
+      const action = e.currentTarget.dataset.action;
+      if (action === 'ver') abrirDesencriptado(id, false);
+      else if (action === 'descargar') abrirDesencriptado(id, true);
+    });
+  });
+}
+
+async function buscarDocumentos(q) {
+  const contenedor = document.getElementById('lista-documentos');
+
+  if (q.length === 0) {
+    cargarDocumentos();
+    return;
+  }
+
+  try {
+    const res = await fetch(
+      `${API_BASE}/api/documentos/buscar?q=${encodeURIComponent(q)}`
+    );
+    if (!res.ok) throw new Error('Error en la búsqueda');
+    const datos = await res.json();
+    renderizarDocumentos(datos);
+  } catch (err) {
+    contenedor.innerHTML =
+      '<p class="mensaje">Error al buscar documentos.</p>';
+  }
+}
+
+const inputBuscador = document.getElementById('buscador');
+let timeoutBusqueda;
+
+if (inputBuscador) {
+  inputBuscador.addEventListener('input', () => {
+    clearTimeout(timeoutBusqueda);
+    const q = inputBuscador.value.trim();
+    timeoutBusqueda = setTimeout(() => buscarDocumentos(q), 300);
+  });
+}
+
 
 document.addEventListener('DOMContentLoaded', cargarDocumentos);

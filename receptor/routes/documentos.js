@@ -116,4 +116,34 @@ router.get('/documentos/:id/decrypt', async (req, res) => {
   }
 });
 
+/**
+ * Busca por nombre entre todos los documentos recibidos (sin desencriptar; solo metadatos).
+ */
+router.get("/documentos/buscar", async (req, res) => {
+  const q = req.query.q;
+
+  if (!q) {
+    return res.json([]);
+  }
+
+  try {
+    const result = await pool.query(
+      `SELECT id, nombre_original, fecha_recepcion
+       FROM documentos
+       WHERE nombre_original ILIKE $1
+       ORDER BY fecha_recepcion DESC`,
+      [`%${q}%`]
+    );
+
+    res.json(result.rows.map((r) => ({
+      id: r.id,
+      nombreOriginal: r.nombre_original,
+      fechaRecepcion: r.fecha_recepcion,
+    })));
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al buscar' });
+  }
+});
+
 module.exports = router;
