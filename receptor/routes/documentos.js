@@ -105,10 +105,10 @@ router.get('/documentos/:id/decrypt', async (req, res) => {
     if (forceDownload) {
       const filename = encodeURIComponent(nombre_original);
       res.setHeader('Content-Disposition', `attachment; filename*=UTF-8''${filename}`);
-      res.setHeader('Content-Type', 'application/octet-stream');
+      res.setHeader('Content-Type', 'application/pdf');
       return res.send(decrypted);
     }
-    res.setHeader('Content-Type', 'application/octet-stream');
+    res.setHeader('Content-Type', 'application/pdf');
     res.send(decrypted);
   } catch (err) {
     console.error('Error desencriptando documento:', err);
