@@ -1,0 +1,53 @@
+# Sistema de transferencia segura de archivos jurídicos
+# Emisor (Bufete) + Receptor (Tribunales) + PostgreSQL
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: juridico-postgres
+    environment:
+      POSTGRES_DB: juridico_receptor
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  receptor:
+    build: ./receptor
+    container_name: juridico-receptor
+    environment:
+      PORT: 4000
+      PG_HOST: postgres
+      PG_PORT: 5432
+      PG_DATABASE: juridico_receptor
+      PG_USER: postgres
+      PG_PASSWORD: postgres
+    volumes:
+      - receptor_keys:/app/keys
+    ports:
+      - "4000:4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  emisor:
+    build: ./emisor
+    container_name: juridico-emisor
+    environment:
+      PORT: 3000
+      RECEPTOR_URL: http://receptor:4000
+    ports:
+      - "3001:3000"
+    depends_on:
+      - receptor
+
+volumes:
+  postgres_data:
+  receptor_keys:

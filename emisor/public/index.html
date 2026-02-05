@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emisor — Envío Seguro de Documentos Jurídicos</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header">
+    <h1>Sistema Emisor de Documentos Jurídicos</h1>
+    <p class="subtitle">Bufete — Envío a tribunales</p>
+  </header>
+  <main class="main">
+    <section class="section">
+      <h2>Enviar documento</h2>
+      <form id="form-envio" class="form-envio">
+        <div class="campo">
+          <label for="archivo">Archivo</label>
+          <input type="file" id="archivo" name="archivo" required accept="*">
+        </div>
+        <div class="campo">
+          <label for="nombreOriginal">Nombre a mostrar (opcional)</label>
+          <input type="text" id="nombreOriginal" name="nombreOriginal" placeholder="Dejar vacío para usar el nombre del archivo">
+        </div>
+        <button type="submit" class="btn" id="btn-enviar">Enviar</button>
+      </form>
+      <div id="resultado" class="resultado" aria-live="polite"></div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
