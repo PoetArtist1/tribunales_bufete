@@ -1,0 +1,138 @@
+:root {
+  --color-fondo: #f5f5f0;
+  --color-papel: #ffffff;
+  --color-texto: #1a1a1a;
+  --color-borde: #c9c9b8;
+  --color-acento: #2c3e50;
+  --color-boton: #34495e;
+  --color-boton-hover: #2c3e50;
+  --sombra: 0 1px 3px rgba(0,0,0,0.08);
+  --fuente: 'Georgia', 'Times New Roman', serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--fuente);
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.5;
+}
+
+.header {
+  background: var(--color-papel);
+  border-bottom: 2px solid var(--color-borde);
+  padding: 1.5rem 2rem;
+  text-align: center;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-acento);
+}
+
+.subtitle {
+  margin: 0.5rem 0 0;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.main {
+  flex: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  width: 100%;
+}
+
+.section {
+  background: var(--color-papel);
+  border: 1px solid var(--color-borde);
+  border-radius: 4px;
+  padding: 1.5rem;
+  box-shadow: var(--sombra);
+}
+
+.section h2 {
+  margin: 0 0 1rem;
+  font-size: 1.2rem;
+  color: var(--color-acento);
+}
+
+.lista-documentos {
+  min-height: 120px;
+}
+
+.mensaje {
+  color: #666;
+  font-style: italic;
+}
+
+.item-documento {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-borde);
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  background: var(--color-fondo);
+}
+
+.item-documento .nombre {
+  font-weight: 500;
+  word-break: break-all;
+}
+
+.item-documento .fecha {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.item-documento .acciones {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-family: var(--fuente);
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-borde);
+  border-radius: 4px;
+  background: var(--color-boton);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn:hover {
+  background: var(--color-boton-hover);
+}
+
+.btn-secundario {
+  background: transparent;
+  color: var(--color-acento);
+}
+
+.btn-secundario:hover {
+  background: rgba(44, 62, 80, 0.08);
+}
+
+.footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.85rem;
+  color: #666;
+  border-top: 1px solid var(--color-borde);
+}
