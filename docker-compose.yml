@@ -14,7 +14,7 @@ services:
     networks:
       - backend
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
       interval: 5s
       timeout: 5s
       retries: 5
@@ -32,7 +32,7 @@ services:
     volumes:
       - receptor_keys:/app/keys
     ports:
-      - "4000:4000"
+      - '4000:4000'
     networks:
       - backend
       - frontend
@@ -47,7 +47,7 @@ services:
       PORT: 3000
       RECEPTOR_URL: http://receptor:4000
     ports:
-      - "3000:3000"
+      - '3000:3000'
     networks:
       - frontend
     depends_on:

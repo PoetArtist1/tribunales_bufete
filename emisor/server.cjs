@@ -9,6 +9,8 @@ const path = require('path');
 const cors = require('cors');
 const envioRouter = require('./routes/envio.cjs');
 
+require('dotenv').config();
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 

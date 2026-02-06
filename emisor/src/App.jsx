@@ -12,6 +12,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import './App.css';
 
+const API_BASE = (import.meta.env.VITE_EMISOR_API_BASE || '').trim();
+
 function App() {
   const [nombreOriginal, setNombreOriginal] = useState('');
   const [enviando, setEnviando] = useState(false);
@@ -45,12 +47,15 @@ function App() {
     }
 
     try {
-      const res = await fetch('/api/enviar', {
+      const endpoint = `${API_BASE}/api/enviar`;
+      console.log('Fetching to:', `"${endpoint}"`);
+      const res = await fetch(endpoint, {
         method: 'POST',
         body: formData,
       });
       const data = await res.json().catch(() => ({}));
 
+      console.log('Response', res, data);
       if (!res.ok) {
         toast.error(
           data.error || res.statusText || 'Error al enviar.',

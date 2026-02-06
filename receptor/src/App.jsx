@@ -10,10 +10,9 @@ import {
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import useMockDocumentos from './mock/useMockDocumentos';
 import './App.css';
 
-const API_BASE = '';
+const API_BASE = (import.meta.env.VITE_API_BASE || '').trim();
 
 function formatearFecha(iso) {
   if (!iso) return '—';
@@ -25,7 +24,6 @@ function formatearFecha(iso) {
 }
 
 function App() {
-  useMockDocumentos(true);
   const [documentos, setDocumentos] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState('');

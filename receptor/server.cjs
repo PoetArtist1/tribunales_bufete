@@ -11,6 +11,8 @@ const fs = require('fs');
 const documentosRouter = require('./routes/documentos.cjs');
 const { pool } = require('./db/pool.cjs');
 
+require('dotenv').config();
+
 const app = express();
 const PORT = process.env.PORT || 4000;
 
