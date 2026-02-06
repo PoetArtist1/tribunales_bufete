@@ -11,8 +11,8 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5433:5432"
+    networks:
+      - backend
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -33,6 +33,9 @@ services:
       - receptor_keys:/app/keys
     ports:
       - "4000:4000"
+    networks:
+      - backend
+      - frontend
     depends_on:
       postgres:
         condition: service_healthy
@@ -44,10 +47,18 @@ services:
       PORT: 3000
       RECEPTOR_URL: http://receptor:4000
     ports:
-      - "3001:3000"
+      - "3000:3000"
+    networks:
+      - frontend
     depends_on:
       - receptor
 
 volumes:
   postgres_data:
   receptor_keys:
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
