@@ -18,6 +18,7 @@ function getKeySizeBytes(keyObject) {
 function rsaDecryptBuffer(buffer, privateKeyPem) {
   const privateKey = crypto.createPrivateKey(privateKeyPem);
   const keySizeBytes = getKeySizeBytes(privateKey);
+  // RSA por bloques: el buffer debe ser múltiplo del tamaño de la clave.
   if (buffer.length % keySizeBytes !== 0) {
     throw new Error('Tamaño de buffer inválido para RSA por bloques');
   }

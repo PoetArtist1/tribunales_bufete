@@ -44,8 +44,14 @@ router.post('/enviar', upload.single('archivo'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'Falta el archivo en el envío' });
   }
+  const normalizeUtf8 = (value) => {
+    if (!value) return value;
+    return Buffer.from(value, 'latin1').toString('utf8');
+  };
   const nombreOriginal =
-    req.body.nombreOriginal || req.file.originalname || 'documento';
+    normalizeUtf8(req.body.nombreOriginal) ||
+    normalizeUtf8(req.file.originalname) ||
+    'documento';
   try {
     const publicKeyRes = await fetch(`${RECEPTOR_URL}/api/public-key`);
     if (!publicKeyRes.ok)

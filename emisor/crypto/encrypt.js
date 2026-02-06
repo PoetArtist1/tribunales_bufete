@@ -6,6 +6,9 @@
 
 const crypto = require('crypto');
 
+// Hash utilizado en OAEP; debe coincidir con el receptor.
+const OAEP_HASH = 'sha256';
+
 const RSA_OPTIONS = {
   modulusLength: 2048,
   publicKeyEncoding: { type: 'spki', format: 'pem' },
@@ -15,6 +18,7 @@ const RSA_OPTIONS = {
 function getKeySizeBytes(keyObject) {
   const details = keyObject.asymmetricKeyDetails;
   if (details?.modulusLength) return Math.ceil(details.modulusLength / 8);
+  // Compatibilidad con Node antiguas que no exponen `asymmetricKeyDetails`.
   return 256; // 2048 bits por defecto
 }
 
@@ -40,7 +44,7 @@ function rsaEncryptBuffer(buffer, publicKeyPem) {
       {
         key: publicKeyPem,
         padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
-        oaepHash: 'sha256',
+        oaepHash: OAEP_HASH,
       },
       chunk,
     );

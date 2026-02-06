@@ -19,14 +19,6 @@ CREATE TABLE IF NOT EXISTS documentos (
 -- Índice para consultas por fecha (listados ordenados)
 CREATE INDEX IF NOT EXISTS idx_documentos_fecha ON documentos(fecha_recepcion DESC);
 
-ALTER TABLE documentos ADD COLUMN IF NOT EXISTS document_id TEXT;
-ALTER TABLE documentos ADD COLUMN IF NOT EXISTS nombre_original VARCHAR(500);
-ALTER TABLE documentos ADD COLUMN IF NOT EXISTS archivo_cifrado BYTEA;
-ALTER TABLE documentos ADD COLUMN IF NOT EXISTS clave_privada_cifrada BYTEA;
-ALTER TABLE documentos ADD COLUMN IF NOT EXISTS hash_sha256 TEXT;
-ALTER TABLE documentos ADD COLUMN IF NOT EXISTS public_key_pem TEXT;
-ALTER TABLE documentos ADD COLUMN IF NOT EXISTS private_key_pem TEXT;
-
 COMMENT ON TABLE documentos IS 'Documentos jurídicos recibidos, almacenados siempre cifrados';
 COMMENT ON COLUMN documentos.archivo_cifrado IS 'Contenido del archivo cifrado con RSA-2048 por bloques';
 COMMENT ON COLUMN documentos.clave_privada_cifrada IS 'Llave privada del documento cifrada con la clave pública RSA-2048 del receptor';
