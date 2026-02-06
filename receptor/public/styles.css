@@ -1,12 +1,10 @@
 :root {
-  --color-fondo: #f5f5f0;
-  --color-papel: #ffffff;
-  --color-texto: #1a1a1a;
-  --color-borde: #c9c9b8;
-  --color-acento: #2c3e50;
-  --color-boton: #34495e;
-  --color-boton-hover: #2c3e50;
-  --sombra: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --app-background: #333848;
+  --app-primary: #bca753;
+  --app-accent: #e09a29;
+  --app-foreground: #f7f7f7;
+  --app-foreground-traslucent: rgba(247, 247, 247, 0.8);
+  --sombra: 0 1px 3px rgba(0, 0, 0, 0.12);
   --fuente: 'Georgia', 'Times New Roman', serif;
 }
 
@@ -16,8 +14,8 @@
 
 body {
   font-family: var(--fuente);
-  background: var(--color-fondo);
-  color: var(--color-texto);
+  background: var(--app-primary);
+  color: var(--app-foreground);
   margin: 0;
   min-height: 100vh;
   display: flex;
@@ -26,8 +24,8 @@ body {
 }
 
 .header {
-  background: var(--color-papel);
-  border-bottom: 2px solid var(--color-borde);
+  background: var(--app-background);
+  border-bottom: 2px solid rgba(247, 247, 247, 0.2);
   padding: 1.5rem 2rem;
   text-align: center;
 }
@@ -36,13 +34,13 @@ body {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
-  color: var(--color-acento);
+  color: #1f2937;
 }
 
 .subtitle {
   margin: 0.5rem 0 0;
   font-size: 0.95rem;
-  color: #555;
+  color: #94a3b8;
 }
 
 .main {
@@ -53,10 +51,25 @@ body {
   width: 100%;
 }
 
+#buscador {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: 6px;
+  border: 1px solid rgba(247, 247, 247, 0.2);
+  background: var(--app-foreground-traslucent);
+  color: #1f2937;
+  font-family: var(--fuente);
+}
+
+#buscador::placeholder {
+  color: #475569;
+}
+
 .section {
-  background: var(--color-papel);
-  border: 1px solid var(--color-borde);
-  border-radius: 4px;
+  background: var(--app-background);
+  border: 1px solid rgba(247, 247, 247, 0.25);
+  border-radius: 8px;
   padding: 1.5rem;
   box-shadow: var(--sombra);
 }
@@ -64,7 +77,7 @@ body {
 .section h2 {
   margin: 0 0 1rem;
   font-size: 1.2rem;
-  color: var(--color-acento);
+  color: #fff;
 }
 
 .lista-documentos {
@@ -72,7 +85,7 @@ body {
 }
 
 .mensaje {
-  color: #666;
+  color: #cbd5f5;
   font-style: italic;
 }
 
@@ -81,10 +94,11 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0.75rem 1rem;
-  border: 1px solid var(--color-borde);
-  border-radius: 4px;
+  border: 1px solid rgba(31, 41, 55, 0.3);
+  border-radius: 6px;
   margin-bottom: 0.5rem;
-  background: var(--color-fondo);
+  background: var(--app-foreground-traslucent);
+  color: #1f2937;
 }
 
 .item-documento .nombre {
@@ -94,7 +108,7 @@ body {
 
 .item-documento .fecha {
   font-size: 0.85rem;
-  color: #666;
+  color: #475569;
   margin-top: 0.25rem;
 }
 
@@ -108,31 +122,40 @@ body {
   font-family: var(--fuente);
   font-size: 0.9rem;
   padding: 0.5rem 1rem;
-  border: 1px solid var(--color-borde);
-  border-radius: 4px;
-  background: var(--color-boton);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: #0f172a;
   color: #fff;
   cursor: pointer;
   transition: background 0.2s;
 }
 
 .btn:hover {
-  background: var(--color-boton-hover);
+  background: #1e293b;
 }
 
 .btn-secundario {
   background: transparent;
-  color: var(--color-acento);
+  color: #1f2937;
+  border: 1px solid rgba(15, 23, 42, 0.3);
 }
 
 .btn-secundario:hover {
-  background: rgba(44, 62, 80, 0.08);
+  background: rgba(15, 23, 42, 0.08);
+}
+
+.btn-peligro {
+  background: #dc2626;
+}
+
+.btn-peligro:hover {
+  background: #b91c1c;
 }
 
 .footer {
   text-align: center;
   padding: 1rem;
   font-size: 0.85rem;
-  color: #666;
-  border-top: 1px solid var(--color-borde);
+  color: #e2e8f0;
+  border-top: 1px solid rgba(247, 247, 247, 0.2);
 }
