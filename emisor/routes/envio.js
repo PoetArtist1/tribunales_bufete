@@ -5,9 +5,8 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
-const { encryptFile } = require('../crypto/encrypt');
+const crypto = require('crypto');
+const { encryptFile, encryptPrivateKey } = require('../crypto/encrypt');
 
 const RECEPTOR_URL = process.env.RECEPTOR_URL || 'http://localhost:4000';
 
@@ -23,34 +22,54 @@ router.get('/clave-publica-receptor', async (req, res) => {
   try {
     const response = await fetch(`${RECEPTOR_URL}/api/public-key`);
     if (!response.ok) throw new Error('No se pudo obtener la clave pública');
-    const pem = await response.text();
-    res.type('application/x-pem-file').send(pem);
+    const data = await response.json();
+    if (!data?.publicKeyPem || !data?.id) {
+      throw new Error('Respuesta inválida de clave pública');
+    }
+    res.json({ id: data.id, publicKeyPem: data.publicKeyPem });
   } catch (err) {
     console.error('Error obteniendo clave pública del receptor:', err);
     res.status(502).json({
-      error: 'No se pudo conectar con el receptor para obtener la clave pública',
+      error:
+        'No se pudo conectar con el receptor para obtener la clave pública',
     });
   }
 });
 
 /**
- * Recibe un archivo por multipart, lo cifra con AES-256 y cifra la clave AES con la RSA del receptor,
- * luego envía al receptor (POST /api/documentos)
+ * Recibe un archivo por multipart, lo cifra con RSA-OAEP (por bloques) y cifra la clave privada
+ * del archivo con la RSA pública del receptor, luego envía al receptor (POST /api/documentos)
  */
 router.post('/enviar', upload.single('archivo'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'Falta el archivo en el envío' });
   }
-  const nombreOriginal = req.body.nombreOriginal || req.file.originalname || 'documento';
+  const nombreOriginal =
+    req.body.nombreOriginal || req.file.originalname || 'documento';
   try {
     const publicKeyRes = await fetch(`${RECEPTOR_URL}/api/public-key`);
-    if (!publicKeyRes.ok) throw new Error('No se pudo obtener la clave pública del receptor');
-    const publicKeyPem = await publicKeyRes.text();
-    const { encryptedContent, encryptedAesKey } = encryptFile(req.file.buffer, publicKeyPem);
+    if (!publicKeyRes.ok)
+      throw new Error('No se pudo obtener la clave pública del receptor');
+    const publicKeyPayload = await publicKeyRes.json();
+    const publicKeyPem = publicKeyPayload?.publicKeyPem;
+    const documentoId = publicKeyPayload?.id;
+
+    if (!publicKeyPem || !documentoId) {
+      throw new Error('Respuesta inválida del receptor (id/clave pública)');
+    }
+
+    const { encryptedContent, privateKeyPem } = encryptFile(req.file.buffer);
+    const encryptedPrivateKey = encryptPrivateKey(privateKeyPem, publicKeyPem);
+    const hashSha256 = crypto
+      .createHash('sha256')
+      .update(req.file.buffer)
+      .digest('hex');
     const body = {
+      id: documentoId,
       nombreOriginal,
       archivoCifradoB64: encryptedContent.toString('base64'),
-      claveAesCifradaB64: encryptedAesKey.toString('base64'),
+      clavePrivadaCifradaB64: encryptedPrivateKey.toString('base64'),
+      hashSha256,
     };
     const sendRes = await fetch(`${RECEPTOR_URL}/api/documentos`, {
       method: 'POST',

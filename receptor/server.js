@@ -10,7 +10,6 @@ const cors = require('cors');
 const fs = require('fs');
 const documentosRouter = require('./routes/documentos');
 const { pool } = require('./db/pool');
-const { generateKeyPair, getPublicKeyPem } = require('./crypto/keys');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -18,12 +17,7 @@ const PORT = process.env.PORT || 4000;
 app.use(cors({ origin: true }));
 app.use(express.json({ limit: '50mb' }));
 
-// Clave pública al arrancar (genera par si no existe)
-if (!fs.existsSync(require('./crypto/keys').PUBLIC_KEY_PATH)) {
-  generateKeyPair();
-} else {
-  getPublicKeyPem(); // asegurar que esté cargada
-}
+// Las claves se generan por documento cuando el emisor solicita la clave pública.
 
 // API de documentos (recibir, listar, desencriptar)
 app.use('/api', documentosRouter);
