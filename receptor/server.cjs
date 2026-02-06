@@ -8,8 +8,8 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const fs = require('fs');
-const documentosRouter = require('./routes/documentos');
-const { pool } = require('./db/pool');
+const documentosRouter = require('./routes/documentos.cjs');
+const { pool } = require('./db/pool.cjs');
 
 const app = express();
 const PORT = process.env.PORT || 4000;

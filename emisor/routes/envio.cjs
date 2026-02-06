@@ -6,7 +6,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const crypto = require('crypto');
-const { encryptFile, encryptPrivateKey } = require('../crypto/encrypt');
+const { encryptFile, encryptPrivateKey } = require('../crypto/encrypt.cjs');
 
 const RECEPTOR_URL = process.env.RECEPTOR_URL || 'http://localhost:4000';
 

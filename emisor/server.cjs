@@ -7,7 +7,7 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const envioRouter = require('./routes/envio');
+const envioRouter = require('./routes/envio.cjs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -25,5 +25,7 @@ app.get('/', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`[Emisor] Servidor en http://localhost:${PORT}`);
-  console.log(`[Emisor] Receptor configurado: ${process.env.RECEPTOR_URL || 'http://localhost:4000'}`);
+  console.log(
+    `[Emisor] Receptor configurado: ${process.env.RECEPTOR_URL || 'http://localhost:4000'}`,
+  );
 });
