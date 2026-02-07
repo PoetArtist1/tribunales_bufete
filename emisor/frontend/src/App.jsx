@@ -48,14 +48,12 @@ function App() {
 
     try {
       const endpoint = `${API_BASE}/api/enviar`;
-      console.log('Fetching to:', `"${endpoint}"`);
       const res = await fetch(endpoint, {
         method: 'POST',
         body: formData,
       });
       const data = await res.json().catch(() => ({}));
 
-      console.log('Response', res, data);
       if (!res.ok) {
         toast.error(
           data.error || res.statusText || 'Error al enviar.',

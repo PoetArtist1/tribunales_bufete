@@ -53,15 +53,12 @@ router.post('/enviar', upload.single('archivo'), async (req, res) => {
     normalizeUtf8(req.file.originalname) ||
     'documento';
   try {
-    console.log('Obteniendo clave pública del receptor...');
     const publicKeyRes = await fetch(`${RECEPTOR_URL}/api/public-key`);
     if (!publicKeyRes.ok)
       throw new Error('No se pudo obtener la clave pública del receptor');
     const publicKeyPayload = await publicKeyRes.json();
-    console.log('Clave pública del receptor obtenida:', publicKeyPayload);
     const publicKeyPem = publicKeyPayload?.publicKeyPem;
     const documentoId = publicKeyPayload?.id;
-    console.log('ID de documento recibido:', documentoId);
 
     if (!publicKeyPem || !documentoId) {
       throw new Error('Respuesta inválida del receptor (id/clave pública)');
@@ -69,7 +66,6 @@ router.post('/enviar', upload.single('archivo'), async (req, res) => {
 
     const { encryptedContent, privateKeyPem } = encryptFile(req.file.buffer);
     const encryptedPrivateKey = encryptPrivateKey(privateKeyPem, publicKeyPem);
-    console.log('Documento cifrado, enviando al receptor...');
     const hashSha256 = crypto
       .createHash('sha256')
       .update(req.file.buffer)
@@ -81,13 +77,7 @@ router.post('/enviar', upload.single('archivo'), async (req, res) => {
       clavePrivadaCifradaB64: encryptedPrivateKey.toString('base64'),
       hashSha256,
     };
-    console.log('Cuerpo preparado para envío:', {
-      id: body.id,
-      nombreOriginal: body.nombreOriginal,
-      archivoCifradoB64Length: body.archivoCifradoB64.length,
-      clavePrivadaCifradaB64Length: body.clavePrivadaCifradaB64.length,
-      hashSha256: body.hashSha256,
-    });
+
     const sendRes = await fetch(`${RECEPTOR_URL}/api/documentos`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -98,7 +88,7 @@ router.post('/enviar', upload.single('archivo'), async (req, res) => {
       throw new Error(errText || 'Error al enviar al receptor');
     }
     const result = await sendRes.json();
-    console.log('Documento enviado y almacenado en el receptor:', result);
+
     res.status(201).json({
       mensaje: 'Documento enviado y almacenado cifrado en el receptor',
       id: result.id,

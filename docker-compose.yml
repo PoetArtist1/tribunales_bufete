@@ -19,9 +19,9 @@ services:
       timeout: 5s
       retries: 5
 
-  receptor:
-    build: ./receptor
-    container_name: juridico-receptor
+  receptor-backend:
+    build: ./receptor/backend
+    container_name: juridico-receptor-backend
     environment:
       PORT_FRONT: 4000
       PORT_BACK: 4001
@@ -33,7 +33,6 @@ services:
     volumes:
       - receptor_keys:/app/keys
     ports:
-      - '4000:4000'
       - '4001:4001'
     expose:
       - '4001'
@@ -44,22 +43,47 @@ services:
       postgres:
         condition: service_healthy
 
-  emisor:
-    build: ./emisor
-    container_name: juridico-emisor
+  receptor-frontend:
+    build: ./receptor/frontend
+    container_name: juridico-receptor-frontend
+    environment:
+      PORT: 4000
+      VITE_API_BASE: http://localhost:4001
+    ports:
+      - '4000:4000'
+    networks:
+      - frontend
+    depends_on:
+      - receptor-backend
+
+  emisor-backend:
+    build: ./emisor/backend
+    container_name: juridico-emisor-backend
     environment:
       PORT_FRONT: 3000
       PORT_BACK: 3001
-      RECEPTOR_URL: http://receptor:4001
+      RECEPTOR_URL: http://receptor-backend:4001
     ports:
-      - '3000:3000'
       - '3001:3001'
     expose:
       - '3001'
     networks:
       - frontend
     depends_on:
-      - receptor
+      - receptor-backend
+
+  emisor-frontend:
+    build: ./emisor/frontend
+    container_name: juridico-emisor-frontend
+    environment:
+      PORT: 3000
+      VITE_EMISOR_API_BASE: http://localhost:3001
+    ports:
+      - '3000:3000'
+    networks:
+      - frontend
+    depends_on:
+      - emisor-backend
 
 volumes:
   postgres_data:

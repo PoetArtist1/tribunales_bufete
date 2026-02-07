@@ -8,6 +8,7 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 4000
-ENV PORT=4000
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "4000"]
+EXPOSE 4001
+ENV PORT_BACK=4001
+ENV PORT_FRONT=4000
+CMD ["node", "server.cjs"]
