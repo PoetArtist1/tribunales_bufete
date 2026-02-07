@@ -5,16 +5,3 @@
   --app-foreground: #f7f7f7;
   --app-foreground-traslucent: rgba(247, 247, 247, 0.8);
 }
-
-:root * {
-  color: var(--app-foreground);
-}
-
-body {
-  background: var(--app-primary);
-}
-
-.title {
-  font-family: 'Georgia', serif;
-  color: white;
-}

@@ -23,7 +23,8 @@ services:
     build: ./receptor
     container_name: juridico-receptor
     environment:
-      PORT: 4000
+      PORT_FRONT: 4000
+      PORT_BACK: 4001
       PG_HOST: postgres
       PG_PORT: 5432
       PG_DATABASE: juridico_receptor
@@ -33,6 +34,9 @@ services:
       - receptor_keys:/app/keys
     ports:
       - '4000:4000'
+      - '4001:4001'
+    expose:
+      - '4001'
     networks:
       - backend
       - frontend
@@ -44,10 +48,14 @@ services:
     build: ./emisor
     container_name: juridico-emisor
     environment:
-      PORT: 3000
-      RECEPTOR_URL: http://receptor:4000
+      PORT_FRONT: 3000
+      PORT_BACK: 3001
+      RECEPTOR_URL: http://receptor:4001
     ports:
       - '3000:3000'
+      - '3001:3001'
+    expose:
+      - '3001'
     networks:
       - frontend
     depends_on:

@@ -1,9 +1,6 @@
+@import url('../../../app-global.css');
+
 :root {
-  --app-background: #333848;
-  --app-primary: #bca753;
-  --app-accent: #e09a29;
-  --app-foreground: #f7f7f7;
-  --app-foreground-traslucent: rgba(247, 247, 247, 0.8);
   --sombra: 0 1px 3px rgba(0, 0, 0, 0.12);
   --fuente: 'Georgia', 'Times New Roman', serif;
 }

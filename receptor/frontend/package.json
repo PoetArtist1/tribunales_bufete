@@ -1,16 +1,13 @@
 {
-  "name": "receptor-juridico",
+  "name": "receptor-juridico-frontend",
   "private": true,
   "version": "1.0.0",
   "description": "Sistema receptor de documentos jurídicos cifrados (Tribunales)",
-  "main": "server.cjs",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "start": "node server.cjs",
-    "dev:server": "node server.cjs"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
