@@ -34,8 +34,6 @@ services:
       - receptor_keys:/app/keys
     ports:
       - '4001:4001'
-    expose:
-      - '4001'
     networks:
       - backend
       - frontend
@@ -44,7 +42,9 @@ services:
         condition: service_healthy
 
   receptor-frontend:
-    build: ./receptor/frontend
+    build:
+      context: .
+      dockerfile: receptor/frontend/Dockerfile
     container_name: juridico-receptor-frontend
     environment:
       PORT: 4000
@@ -65,15 +65,15 @@ services:
       RECEPTOR_URL: http://receptor-backend:4001
     ports:
       - '3001:3001'
-    expose:
-      - '3001'
     networks:
       - frontend
     depends_on:
       - receptor-backend
 
   emisor-frontend:
-    build: ./emisor/frontend
+    build:
+      context: .
+      dockerfile: emisor/frontend/Dockerfile
     container_name: juridico-emisor-frontend
     environment:
       PORT: 3000

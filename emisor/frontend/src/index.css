@@ -1,3 +1,4 @@
+@import 'app-global.css';
 @import 'tailwindcss';
 
 @custom-variant dark (&:is(.dark *));
@@ -64,9 +65,6 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
 }
 button:focus,
 button:focus-visible {

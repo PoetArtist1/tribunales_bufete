@@ -62,10 +62,7 @@ function App() {
         return;
       }
 
-      toast.success(
-        `Documento enviado correctamente. Fecha recepción: ${data.fechaRecepcion || '—'}.`,
-        toastTheme,
-      );
+      toast.success(`Documento enviado correctamente`, toastTheme);
 
       setNombreOriginal('');
       if (fileRef.current) {

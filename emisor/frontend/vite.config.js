@@ -12,11 +12,15 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
+      'app-global.css': path.resolve(__dirname, '..', '..', 'app-global.css'),
       '@': path.resolve(__dirname, './src'),
     },
     dedupe: ['react', 'react-dom'],
   },
   server: {
+    fs: {
+      allow: [path.resolve(__dirname, '..', '..', '..')],
+    },
     proxy: {
       '/api': {
         target: 'http://localhost:3000',

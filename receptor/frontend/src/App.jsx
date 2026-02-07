@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import useMockDocumentos from './mock/useMockDocumentos';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -24,6 +25,8 @@ function formatearFecha(iso) {
 }
 
 function App() {
+  useMockDocumentos(true);
+
   const [documentos, setDocumentos] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState('');
@@ -217,7 +220,7 @@ function App() {
                       <div className='flex flex-wrap gap-2'>
                         <Button
                           type='button'
-                          className=' w-5 bg-transparent! border border-slate-400 text-slate-800 hover:bg-slate-200!'
+                          className=' w-5 bg-gray-100! hover:bg-slate-200! border border-slate-400 text-slate-800'
                           onClick={() => abrirDesencriptado(doc.id, false)}
                         >
                           <svg
@@ -258,7 +261,7 @@ function App() {
                         </Button>
                         <Button
                           type='button'
-                          className=' w-5 bg-red-600! hover:bg-red-700!'
+                          className=' w-5 bg-[#8f0e00]! hover:bg-[#7a0c00]!'
                           onClick={() => eliminarDocumento(doc.id)}
                         >
                           <svg

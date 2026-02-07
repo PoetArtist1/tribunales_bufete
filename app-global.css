@@ -1,7 +1,32 @@
 :root {
-  --app-background: #333848;
-  --app-primary: #bca753;
+  /* --app-primary: #bca753; */
+  /* --app-background: #333848; */
+  --app-background: #2a2e3c;
+  --app-primary: #a0820a;
   --app-accent: #e09a29;
   --app-foreground: #f7f7f7;
   --app-foreground-traslucent: rgba(247, 247, 247, 0.8);
+}
+
+:root * {
+  color: var(--app-foreground);
+}
+
+body {
+  --background-url-image: url('./assets/background.jpg');
+  background:
+    linear-gradient(color-mix(in srgb, var(--app-primary) 55%, transparent)),
+    var(--background-url-image) center/cover repeat,
+    var(--app-primary);
+  background-size: 300px 300px;
+  z-index: 0;
+}
+
+#root {
+  backdrop-filter: blur(1px);
+}
+
+.title {
+  font-family: 'Georgia', serif;
+  color: white;
 }

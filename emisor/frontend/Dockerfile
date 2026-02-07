@@ -1,12 +1,13 @@
 # Emisor frontend
 FROM node:24-alpine
 
-WORKDIR /app
+WORKDIR /app/emisor/frontend
 
-COPY package*.json ./
+COPY emisor/frontend/package*.json ./
 RUN npm install
 
-COPY . .
+COPY emisor/frontend/ ./
+COPY app-global.css /app/app-global.css
 
 EXPOSE 3000
 ENV PORT=3000

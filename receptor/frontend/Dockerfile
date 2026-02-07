@@ -1,12 +1,13 @@
 # Receptor frontend
 FROM node:24-alpine
 
-WORKDIR /app
+WORKDIR /app/receptor/frontend
 
-COPY package*.json ./
+COPY receptor/frontend/package*.json ./
 RUN npm install
 
-COPY . .
+COPY receptor/frontend/ ./
+COPY app-global.css /app/app-global.css
 
 EXPOSE 4000
 ENV PORT=4000
