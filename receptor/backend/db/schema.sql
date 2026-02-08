@@ -1,9 +1,6 @@
 -- Esquema de base de datos para el receptor (Tribunales)
 -- Almacena documentos jurídicos siempre cifrados
 
--- Limpieza previa para evitar conflictos con versiones anteriores
-DROP TABLE IF EXISTS documentos CASCADE;
-
 CREATE TABLE IF NOT EXISTS documentos (
   id SERIAL PRIMARY KEY,
   document_id TEXT UNIQUE NOT NULL,
