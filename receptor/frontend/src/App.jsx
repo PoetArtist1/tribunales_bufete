@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react';
-import useMockDocumentos from './mock/useMockDocumentos';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -12,6 +11,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import './App.css';
+import Logo from '../../../assets/logo.png';
 
 const API_BASE = (import.meta.env.VITE_API_BASE || '').trim();
 
@@ -25,8 +25,6 @@ function formatearFecha(iso) {
 }
 
 function App() {
-  useMockDocumentos(true);
-
   const [documentos, setDocumentos] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState('');
@@ -115,12 +113,17 @@ function App() {
 
   return (
     <div className='min-h-screen w-full'>
-      <header className='w-full border-b border-gray-400 bg-(--app-background)'>
-        <div className='w-full px-6 py-6 text-center font-[Georgia]'>
-          <h1 className='text-xl font-semibold text-slate-800'>
+      <header className='flex flex-row w-full border-b border-gray-400 bg-(--app-background)'>
+        <img
+          src={Logo}
+          alt='Logo del sistema'
+          className='h-18 w-18 object-contain ml-10 my-auto -mr-10'
+        />
+        <div className='w-full px-6 py-6 text-center'>
+          <div className='text-4xl font-semibold text-slate-800 title'>
             Sistema Receptor de Documentos Jurídicos
-          </h1>
-          <p className='mt-5 text-sm text-slate-500'>
+          </div>
+          <p className='mt-5 text-sm text-slate-500 subtitle font-semibold text-traslucent'>
             Tribunales — Consulta de documentos
           </p>
         </div>
@@ -138,11 +141,13 @@ function App() {
                 xmlns='http://www.w3.org/2000/svg'
               >
                 <path
-                  className=' text-(--app-background)!'
+                  className='text-(--app-background)!'
                   d='M10 6.5C10 8.433 8.433 10 6.5 10C4.567 10 3 8.433 3 6.5C3 4.567 4.567 3 6.5 3C8.433 3 10 4.567 10 6.5ZM9.30884 10.0159C8.53901 10.6318 7.56251 11 6.5 11C4.01472 11 2 8.98528 2 6.5C2 4.01472 4.01472 2 6.5 2C8.98528 2 11 4.01472 11 6.5C11 7.56251 10.6318 8.53901 10.0159 9.30884L12.8536 12.1464C13.0488 12.3417 13.0488 12.6583 12.8536 12.8536C12.6583 13.0488 12.3417 13.0488 12.1464 12.8536L9.30884 10.0159Z'
                   fill='currentColor'
                   fill-rule='evenodd'
                   clip-rule='evenodd'
+                  stroke='currentColor'
+                  stroke-width='0.75'
                 ></path>
               </svg>
             </Label>
@@ -157,7 +162,7 @@ function App() {
         </div>
         <Card className='border-gray-400 shadow-sm bg-(--app-background)'>
           <CardHeader>
-            <CardTitle className='text-xl title'>
+            <CardTitle className='text-xl subtitle'>
               Documentos recibidos
             </CardTitle>
             <CardDescription>
@@ -184,10 +189,10 @@ function App() {
                     id='mensaje-lista'
                     className='border-gray-300 bg-(--app-foreground-traslucent)!'
                   >
-                    <AlertTitle className='text-destructive!'>
+                    <AlertTitle className='text-(--app-destructive)!'>
                       Error al cargar los documentos
                     </AlertTitle>
-                    <AlertDescription className='text-destructive!'>
+                    <AlertDescription className='text-(--app-destructive)!'>
                       {error}
                     </AlertDescription>
                   </Alert>
@@ -261,7 +266,7 @@ function App() {
                         </Button>
                         <Button
                           type='button'
-                          className=' w-5 bg-[#8f0e00]! hover:bg-[#7a0c00]!'
+                          className=' w-5 bg-(--app-destructive)! hover:bg-(--app-destructive-hover)!'
                           onClick={() => eliminarDocumento(doc.id)}
                         >
                           <svg

@@ -1,11 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Gravitas+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ultra&display=swap');
+
 :root {
   /* --app-primary: #bca753; */
   /* --app-background: #333848; */
+  /* --app-primary: #a0820a;
+  --app-accent: #e09a29; */
+
+  --black: #000000;
   --app-background: #2a2e3c;
-  --app-primary: #a0820a;
-  --app-accent: #e09a29;
+  --app-primary: #c0983e;
+  --app-accent: #d6b663;
   --app-foreground: #f7f7f7;
   --app-foreground-traslucent: rgba(247, 247, 247, 0.8);
+  --app-destructive: #8f0e00;
+  --app-destructive-hover: #7a0c00;
+  --subtitle-font: 'Gravitas One', 'Georgia', 'Times New Roman';
+  --title-font: 'Ultra', 'Verdana', 'Georgia';
 }
 
 :root * {
@@ -13,20 +24,27 @@
 }
 
 body {
-  --background-url-image: url('./assets/background.jpg');
+  --background-url-image: url('./assets/background2.jpg');
   background:
-    linear-gradient(color-mix(in srgb, var(--app-primary) 55%, transparent)),
+    linear-gradient(color-mix(in srgb, var(--app-primary) 0%, transparent)),
     var(--background-url-image) center/cover repeat,
     var(--app-primary);
-  background-size: 300px 300px;
   z-index: 0;
 }
 
 #root {
-  backdrop-filter: blur(1px);
+  backdrop-filter: blur(2px);
 }
 
 .title {
-  font-family: 'Georgia', serif;
-  color: white;
+  font-family: var(--title-font);
+  /* letter-spacing: 0.02em; */
+}
+
+.subtitle {
+  font-family: var(--subtitle-font);
+}
+
+.text-traslucent {
+  color: var(--app-foreground-traslucent);
 }

@@ -11,6 +11,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import './App.css';
+import Logo from '../../../assets/logo.png';
 
 const API_BASE = (import.meta.env.VITE_EMISOR_API_BASE || '').trim();
 
@@ -78,24 +79,29 @@ function App() {
 
   return (
     <div className='min-h-screen w-full'>
-      <header className='w-full border-b border-gray-400 bg-(--app-background)'>
-        <div className='w-full px-6 py-6 text-center font-[Georgia]'>
-          <h1 className='text-xl font-semibold text-slate-800'>
+      <header className='flex flex-row w-full border-b border-gray-400 bg-(--app-background)'>
+        <img
+          src={Logo}
+          alt='Logo del sistema'
+          className='h-18 w-18 object-contain ml-10 my-auto -mr-10'
+        />
+        <div className='w-full px-6 py-6 text-center'>
+          <div className='text-4xl font-semibold text-slate-800 title'>
             Sistema Emisor de Documentos Jurídicos
-          </h1>
-          <p className='mt-5 text-sm text-slate-500'>
+          </div>
+          <p className='mt-5 text-sm text-slate-500 subtitle font-semibold text-traslucent'>
             Bufete — Envío a tribunales
           </p>
         </div>
       </header>
 
-      <main className='mx-auto w-full max-w-3xl px-6 py-10'>
+      <main className='mx-auto w-full max-w-4xl px-6 py-10'>
         <div>
           <Toaster position='top-center' reverseOrder={false} />
         </div>
         <Card className='border-gray-400 shadow-sm bg-(--app-background)'>
           <CardHeader>
-            <CardTitle className='text-xl title'>Enviar documento</CardTitle>
+            <CardTitle className='text-xl subtitle'>Enviar documento</CardTitle>
             <CardDescription>
               Adjunte un archivo y, si lo desea, indique un nombre visible.
             </CardDescription>
@@ -132,7 +138,7 @@ function App() {
                 <Button
                   type='submit'
                   disabled={enviando}
-                  className='bg-slate-900! hover:bg-slate-800!'
+                  className='bg-(--app-primary)! hover:bg-(--app-accent)! mt-5 shadow-lg shadow-gray-900 hover:shadow-xl text-(--black)! transition-colors duration-200'
                 >
                   {enviando ? 'Enviando...' : 'Enviar'}
                 </Button>
