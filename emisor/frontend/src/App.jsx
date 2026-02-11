@@ -11,7 +11,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import './App.css';
-import Logo from '../../../assets/logo.png';
+import Logo from '@/assets/logo.png';
 
 const API_BASE = (import.meta.env.VITE_EMISOR_API_BASE || '').trim();
 
