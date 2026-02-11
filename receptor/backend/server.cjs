@@ -10,8 +10,10 @@ const cors = require('cors');
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
+const { WebSocketServer } = require('ws');
 const documentosRouter = require('./routes/documentos.cjs');
 const { pool } = require('./db/pool.cjs');
+const { setWebSocketServer } = require('./ws.cjs');
 
 require('dotenv').config();
 
@@ -88,8 +90,17 @@ async function initDb() {
 async function start() {
   try {
     await initDb();
-    appApi.listen(PORT_BACK, () => {
+    const apiServer = http.createServer(appApi);
+    const wss = new WebSocketServer({ server: apiServer, path: '/ws' });
+    setWebSocketServer(wss);
+
+    wss.on('connection', (socket) => {
+      socket.send(JSON.stringify({ event: 'connected' }));
+    });
+
+    apiServer.listen(PORT_BACK, () => {
       console.log(`[Receptor] API en http://localhost:${PORT_BACK}`);
+      console.log(`[Receptor] WebSocket en ws://localhost:${PORT_BACK}/ws`);
     });
     appFront.listen(PORT_FRONT, () => {
       console.log(`[Receptor] Frontend en http://localhost:${PORT_FRONT}`);

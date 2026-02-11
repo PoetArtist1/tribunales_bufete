@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -14,6 +14,15 @@ import './App.css';
 import Logo from '../../../assets/logo.png';
 
 const API_BASE = (import.meta.env.VITE_API_BASE || '').trim();
+const WS_BASE = (import.meta.env.VITE_WS_BASE || '').trim();
+
+function obtenerUrlWebSocket() {
+  if (typeof window === 'undefined') return '';
+  const base = WS_BASE || API_BASE || window.location.origin;
+  if (!base) return '';
+  const wsBase = base.replace(/^http/i, 'ws').replace(/\/$/, '');
+  return `${wsBase}/ws`;
+}
 
 function formatearFecha(iso) {
   if (!iso) return '—';
@@ -29,8 +38,13 @@ function App() {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState('');
   const [busqueda, setBusqueda] = useState('');
+  const textoBusquedaRef = useRef('');
 
   const textoBusqueda = useMemo(() => busqueda.trim(), [busqueda]);
+
+  useEffect(() => {
+    textoBusquedaRef.current = textoBusqueda;
+  }, [textoBusqueda]);
 
   const cargarDocumentos = async () => {
     setCargando(true);
@@ -68,6 +82,50 @@ function App() {
 
   useEffect(() => {
     cargarDocumentos();
+  }, []);
+
+  useEffect(() => {
+    const wsUrl = obtenerUrlWebSocket();
+    if (!wsUrl) return undefined;
+    let socket;
+    let reconnectTimer;
+
+    const conectar = () => {
+      socket = new WebSocket(wsUrl);
+
+      socket.addEventListener('message', (event) => {
+        try {
+          const data = JSON.parse(event.data || '{}');
+          if (data.event === 'documento:nuevo') {
+            const busquedaActual = textoBusquedaRef.current;
+            if (busquedaActual) {
+              buscarDocumentos(busquedaActual);
+            } else {
+              cargarDocumentos();
+            }
+          }
+        } catch {
+          // Ignorar mensajes no JSON
+        }
+      });
+
+      socket.addEventListener('close', () => {
+        reconnectTimer = window.setTimeout(conectar, 2000);
+      });
+
+      socket.addEventListener('error', () => {
+        socket.close();
+      });
+    };
+
+    conectar();
+
+    return () => {
+      if (reconnectTimer) window.clearTimeout(reconnectTimer);
+      if (socket && socket.readyState <= 1) {
+        socket.close();
+      }
+    };
   }, []);
 
   useEffect(() => {

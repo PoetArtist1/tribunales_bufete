@@ -9,6 +9,7 @@ const { pool } = require('../db/pool.cjs');
 const crypto = require('crypto');
 const { generatePerFileKeyPair } = require('../crypto/keys.cjs');
 const { decryptFile, decryptFilePrivateKey } = require('../crypto/decrypt.cjs');
+const { broadcast } = require('../ws.cjs');
 
 function calcularHashSha256(buffer) {
   return crypto.createHash('sha256').update(buffer).digest('hex');
@@ -110,6 +111,11 @@ router.post(
           [nombreOriginal, archivoCifrado, clavePrivadaCifrada, hashSha256, id],
         );
         const row = result.rows[0];
+        broadcast('documento:nuevo', {
+          id: row.document_id,
+          nombreOriginal: row.nombre_original,
+          fechaRecepcion: row.fecha_recepcion,
+        });
         res.status(201).json({
           id: row.document_id,
           nombreOriginal: row.nombre_original,
